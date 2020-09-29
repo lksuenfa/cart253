@@ -38,6 +38,9 @@ function draw() {
 
   background(0);
 
+
+
+//Covid19 movement
   covid19.x = covid19.x + covid19.vx ;
   covid19.y = covid19.y + covid19.vy ;
 
@@ -46,9 +49,21 @@ function draw() {
     covid19.y = random(0, height);
   }
 
+//user movement
+  user.x = mouseX;
+  user.y = mouseY;
+
+//Catch Covid19
+let d = dist(user.x, user.y, covid19.x, covid19.y);
+
+//Display covid19
   fill(covid19.fill.r, covid19.fill.g, covid19.fill.b );
   noStroke();
   ellipse(covid19.x, covid19.y, covid19.size);
+
+//Display user
+fill(user.fill);
+ellipse(user.x, user.y, user.size);
 
 
 
