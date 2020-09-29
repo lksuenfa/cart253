@@ -19,6 +19,7 @@ let covid19 = {
   }
 };
 
+let numStatic = 1000 ; 
 
 function setup() {
 createCanvas (windowWidth, windowHeight);
@@ -40,7 +41,7 @@ function draw() {
 
 //Display static
 
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < numStatic; i++) {
   let x = random(0, width);
   let y = random(0, height);
   stroke(255);
