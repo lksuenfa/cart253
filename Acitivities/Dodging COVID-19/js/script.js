@@ -38,6 +38,16 @@ function draw() {
 
   background(0);
 
+//Display static
+
+for (let i = 0; i < 1000; i++) {
+  let x = random(0, width);
+  let y = random(0, height);
+  stroke(255);
+  point(x,y);
+
+};
+
 
 
 //Covid19 movement
@@ -55,6 +65,10 @@ function draw() {
 
 //Catch Covid19
 let d = dist(user.x, user.y, covid19.x, covid19.y);
+
+if (d < (covid19.size/2 + user.size/2)) {
+    noLoop();
+};
 
 //Display covid19
   fill(covid19.fill.r, covid19.fill.g, covid19.fill.b );
