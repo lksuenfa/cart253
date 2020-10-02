@@ -91,6 +91,7 @@ function draw() {
   user.x = width -  user.maxDist; //constrain user movement to a vertical axis
   user.y = user.y + user.vy;
 
+//contaminated user turns same colour as covid19 when they touch
   let d = dist(user.x, user.y, covid19.x, covid19.y);
 
   if (d < (covid19.size/2 + user.size/2)) {
