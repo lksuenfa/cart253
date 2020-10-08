@@ -1,41 +1,52 @@
-let circle = {
-  x: 250,
+
+/**************************************************
+Looking for love
+Leanne Suen Fa
+**************************************************/
+
+let circle1 = {
+  x: 150,
   y: 250,
   size: 100,
   vx: 0,
   vy: 0,
-  speed: 2
+  speed: 3
+}
+let circle2 = {
+  x: 350,
+  y: 250,
+  size: 100,
+  vx: 0,
+  vy: 0,
+  speed: 3
 }
 
 function setup() {
   createCanvas(500, 500);
+
+  //Position circles
+  circle1.x = width/3;
+  circle2.x = 2*width/3;
+
+  //Start moving circle in random direction
+  circle1.vx = random(-circle1.speed, circle1.speed);
+  circle1.vy = random(-circle1.speed, circle1.speed);
+
+  circle2.vx = random(-circle2.speed, circle2.speed);
+  circle2.vy = random(-circle2.speed, circle2.speed);
 }
 
 function draw() {
   background(0);
 
-  let dx = circle.x - mouseX; // Distance between the circle and the mouse horizontally
-  let dy = circle.y - mouseY; // Distance between the circle and the mouse vertically
+  //Move circles
+  circle1.x = circle1.x + circle1.vx;
+  circle1.y = circle1.y + circle1.vy;
 
-  if (dx < 0) { // If dx is negative, the mouse is to the right
-    // So move right
-    circle.vx = circle.speed;
-  }
-  else if (dx > 0) { // If dx is positive, the mouse is to the left
-    // So move left
-    circle.vx = -circle.speed;
-  }
+  circle2.x = circle2.x + circle2.vx;
+  circle2.y = circle2.y + circle2.vy;
 
-  // Same again for the y axis
-  if (dy < 0) {
-    circle.vy = circle.speed;
-  }
-  else if (dy > 0) {
-    circle.vy = -circle.speed;
-  }
-
-  circle.x = circle.x + circle.vx;
-  circle.y = circle.y + circle.vy;
-
-  ellipse(circle.x, circle.y, circle.size);
+  //Display circles
+  ellipse(circle1.x,circle1.y,circle1.size);
+  ellipse(circle2.x,circle2.y,circle2.size);
 }
