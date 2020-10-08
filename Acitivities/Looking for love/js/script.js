@@ -10,7 +10,7 @@ let circle1 = {
   size: 100,
   vx: 0,
   vy: 0,
-  speed: 3
+  speed: 5
 }
 let circle2 = {
   x: 350,
@@ -18,7 +18,7 @@ let circle2 = {
   size: 100,
   vx: 0,
   vy: 0,
-  speed: 3
+  speed: 5
 }
 
 let state =  `title`; // can be title, simulation, love, sadness
@@ -56,7 +56,7 @@ function draw() {
     love();
   }
   else if (state == `sadness`) {
-
+    sadness();
   }
 }
 
@@ -88,6 +88,16 @@ function love(){
   pop();
 }
 
+
+function sadness(){
+  push();
+  textSize(64);
+  fill(150,150,255);
+  textAlign(CENTER, CENTER);
+  text(`:(`, width/2, height/2);
+  pop();
+}
+
 //Move circles
 function move() {
   circle1.x = circle1.x + circle1.vx;
@@ -99,12 +109,18 @@ function move() {
 
 //checkif circles have gone offscreen
 function checkOffScreen() {
-
-  if (circle1.x < 0 || circle1.x > width || circle1.y < 0 || circle1.y > height || circle2.x < 0 || circle2.x > width || circle2.y < 0 || circle2.y > height) {
-
-    //sad ending
+  if (isOffScreen(circle1) || isOffScreen(circle2)) {
+    state = `sadness`;
   }
+}
 
+function isOffScreen(circle){
+  if (circle.x < 0 || circle.x > width || circle.y < 0 || circle.y > height) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 //check if circles overlap
