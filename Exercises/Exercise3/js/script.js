@@ -1,8 +1,12 @@
 
 /**************************************************
-Looking for love
+Exercise 03: Love, actually
 Leanne Suen Fa
-**************************************************/
+
+(x) Allow the user to control one of the circles
+( ) Make the non-user circle move differently
+( ) Add at least one extra function, Not including functions any built-in p5 functions like keyPressed()
+********************************************/
 
 let circle1 = {
   x: 150,
@@ -39,8 +43,6 @@ function setupCircles() {
   circle1.vx = random(-circle1.speed, circle1.speed);
   circle1.vy = random(-circle1.speed, circle1.speed);
 
-  circle2.vx = random(-circle2.speed, circle2.speed);
-  circle2.vy = random(-circle2.speed, circle2.speed);
 }
 
 function draw() {
@@ -100,8 +102,25 @@ function sadness(){
 
 //Move circles
 function move() {
+
+  //circle 1 moves randomly
   circle1.x = circle1.x + circle1.vx;
   circle1.y = circle1.y + circle1.vy;
+
+  //circle 2 follows cursor
+  if (mouseX > circle2.x) {
+     circle2.vx = circle2.speed;
+   }
+   else if (mouseX < circle2.x) {
+     circle2.vx = -circle2.speed;
+   }
+
+   if (mouseY > circle2.y) {
+     circle2.vy = circle2.speed;
+   }
+   else if (mouseY < circle2.y) {
+     circle2.vy = -circle2.speed;
+   }
 
   circle2.x = circle2.x + circle2.vx;
   circle2.y = circle2.y + circle2.vy;
