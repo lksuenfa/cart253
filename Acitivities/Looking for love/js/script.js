@@ -21,7 +21,7 @@ let circle2 = {
   speed: 3
 }
 
-let state =  `simulation`; // can be title, simulation, love, sadness
+let state =  `title`; // can be title, simulation, love, sadness
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -47,7 +47,7 @@ function draw() {
   background(0);
 
   if (state == `title`) {
-
+    title();
   }
   else if (state == `simulation`) {
       simulation();
@@ -56,11 +56,18 @@ function draw() {
 
   }
   else if (state == `sadness`) {
-    
+
   }
+}
 
+function title() {
 
-
+  push();
+  textSize(64);
+  fill(200,100,100);
+  textAlign(CENTER, CENTER);
+  text(`LOVE?`, width/2, height/2);
+  pop();
 }
 
 function simulation() {
@@ -103,4 +110,11 @@ function checkOverlap(){
 function display() {
   ellipse(circle1.x,circle1.y,circle1.size);
   ellipse(circle2.x,circle2.y,circle2.size);
+}
+
+function mousePressed() {
+  if (state==`title`) {
+    state = `simulation`;
+  }
+
 }
