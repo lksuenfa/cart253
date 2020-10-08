@@ -6,23 +6,26 @@ Leanne Suen Fa
 (x) Allow the user to control one of the circles
 ( ) Make the non-user circle move differently
 ( ) Add at least one extra function, Not including functions any built-in p5 functions like keyPressed()
+( ) Add at least one extra ending
 ********************************************/
 
 let circle1 = {
   x: 150,
   y: 250,
-  size: 100,
+  size: 50,
   vx: 0,
   vy: 0,
-  speed: 5
+  speed: 5,
+  noise: 0.003
+
 }
 let circle2 = {
   x: 350,
   y: 250,
-  size: 100,
+  size: 50,
   vx: 0,
   vy: 0,
-  speed: 5
+  speed: 1
 }
 
 let state =  `title`; // can be title, simulation, love, sadness
@@ -39,9 +42,6 @@ function setupCircles() {
   circle1.x = width/3;
   circle2.x = 2*width/3;
 
-  //Start moving circle in random direction
-  circle1.vx = random(-circle1.speed, circle1.speed);
-  circle1.vy = random(-circle1.speed, circle1.speed);
 
 }
 
@@ -103,9 +103,22 @@ function sadness(){
 //Move circles
 function move() {
 
-  //circle 1 moves randomly
-  circle1.x = circle1.x + circle1.vx;
-  circle1.y = circle1.y + circle1.vy;
+  //circle 1 moves randomly using Perlin noise
+
+  circle1.speed = random (-circle1.noise,circle1.noise*10);
+
+  circle1.vx = circle1.vx + circle1.speed ;
+
+  circle1.speed = random (-circle1.noise,circle1.noise*15);
+  circle1.vy = circle1.vy + circle1.speed ;
+
+
+  circle1.x = noise(circle1.vx);
+  circle1.x = map(circle1.x, 0, 1, 0, width);
+
+  circle1.y = noise(circle1.vy);
+  circle1.y = map(circle1.y, 0, 1, 0 ,height);
+
 
   //circle 2 follows cursor
   if (mouseX > circle2.x) {
