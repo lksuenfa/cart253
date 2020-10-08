@@ -50,10 +50,10 @@ function draw() {
     title();
   }
   else if (state == `simulation`) {
-      simulation();
+    simulation();
   }
   else if (state == `love`) {
-
+    love();
   }
   else if (state == `sadness`) {
 
@@ -68,6 +68,7 @@ function title() {
   textAlign(CENTER, CENTER);
   text(`LOVE?`, width/2, height/2);
   pop();
+
 }
 
 function simulation() {
@@ -77,6 +78,16 @@ function simulation() {
   display();
 
 }
+
+function love(){
+  push();
+  textSize(64);
+  fill(255,150,150);
+  textAlign(CENTER, CENTER);
+  text(`LOVE!`, width/2, height/2);
+  pop();
+}
+
 //Move circles
 function move() {
   circle1.x = circle1.x + circle1.vx;
@@ -101,7 +112,7 @@ function checkOverlap(){
 
   let d = dist(circle1.x, circle1.y, circle2.x, circle2.y);
     if (d < (circle1.size/2 + circle2.size/2) ) {
-    //Love ending
+    state = `love`;
   };
 
 }
