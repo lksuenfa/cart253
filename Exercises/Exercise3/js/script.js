@@ -2,11 +2,6 @@
 /**************************************************
 Exercise 03: Love, actually
 Leanne Suen Fa
-
-(x) Allow the user to control one of the circles
-(x) Make the non-user circle move differently
-( ) Add at least one extra function, Not including functions any built-in p5 functions like keyPressed()
-( ) Add at least one extra ending
 ********************************************/
 
 let circle1 = {
@@ -17,12 +12,7 @@ let circle1 = {
   vy: 0,
   speed: 5,
   noise: 0.003,
-  fill : {
-    r: 255,
-    g: 255,
-    b: 255,
-  }
-
+  fill : 255
 }
 
 
@@ -32,18 +22,11 @@ let circle2 = {
   size: 50,
   vx: 0,
   vy: 0,
-  speed: 1,
-  fill : {
-    r: 255,
-    g: 255,
-    b: 255,
-  }
-
+  speed: 3,
+  fill : 255
 }
 
 let state =  `title`; // can be title, simulation, love, sadness
-
-
 
 
 function setup() {
@@ -58,11 +41,11 @@ function setupCircles() {
   circle2.x = 2*width/3;
 }
 
-
-
 function draw() {
   background(0);
 
+
+//control screen state according to different lover outcomes
   switch (state) {
     case `title`:
       title();
@@ -79,30 +62,16 @@ function draw() {
     case `sadness` :
       sadness();
       break;
-  }
 
-/**
-  if (state == `title`) {
-    title();
-  }
-  else if (state == `simulation`) {
-    simulation();
-  }
-  else if (state == `love`) {
-    love();
-  }
-  else if (state == `sadness`) {
-    sadness();
-  }
-**/
+    case `far`:
+      far();
+      break;
+  };
+
 }
 
 
-
-
-
-
-
+//display different messages in different colours
 function title() {
 
   push();
@@ -141,11 +110,19 @@ function sadness(){
   pop();
 }
 
+function far(){
+  push();
+  textSize(64);
+  fill(235, 235, 52); //yellow
+  textAlign(CENTER, CENTER);
+  text(`Far from the eyes..`, width/2, height/2);
+  pop();
+}
+
 //Move circles
 function move() {
 
   //circle 1 moves randomly using Perlin noise
-
   circle1.speed = random (-circle1.noise,circle1.noise*10);
 
   circle1.vx = circle1.vx + circle1.speed ;
@@ -187,6 +164,7 @@ function checkOffScreen() {
   }
 }
 
+//assign a value of true if circle is off screen
 function isOffScreen(circle){
   if (circle.x < 0 || circle.x > width || circle.y < 0 || circle.y > height) {
     return true;
@@ -198,24 +176,47 @@ function isOffScreen(circle){
 
 //check if circles overlap
 function checkOverlap(){
-
-  let d = dist(circle1.x, circle1.y, circle2.x, circle2.y);
+let d = dist(circle1.x, circle1.y, circle2.x, circle2.y);
+//if overlaps, state love
     if (d < (circle1.size/2 + circle2.size/2) ) {
-    state = `love`;
-  };
+    state = `love`
+  }
+//if too far, state far
+    else if (d > 700){
+      state = `far`;
+    }
+  }
+
+
+function changeColour() {
+//change colour according to distance between the circles
+  let d = dist(circle1.x, circle1.y, circle2.x, circle2.y);
+
+  let maxDist = 400;
+  let minDist = circle1.size/2 + circle1.size/2;
+
+  circle1.fill = map(d, minDist, maxDist, 255, 50); //get whiter, the closer they are
+  circle1.fill = constrain(circle1.fill, 50, 255);
 
 }
+
 
 //Display circles
 function display() {
+
+  fill(circle1.fill);
+  changeColour();
   ellipse(circle1.x,circle1.y,circle1.size);
+
+
+  fill(circle2.fill);
   ellipse(circle2.x,circle2.y,circle2.size);
 }
+
 
 //Click to start
 function mousePressed() {
   if (state==`title`) {
     state = `simulation`;
   }
-
 }
