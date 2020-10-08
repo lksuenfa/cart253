@@ -21,9 +21,16 @@ let circle2 = {
   speed: 3
 }
 
-function setup() {
-  createCanvas(500, 500);
+let state =  `simulation`; // can be title, simulation, love, sadness
 
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+
+  setupCircles();
+
+}
+
+function setupCircles() {
   //Position circles
   circle1.x = width/3;
   circle2.x = 2*width/3;
@@ -39,14 +46,61 @@ function setup() {
 function draw() {
   background(0);
 
-  //Move circles
+  if (state == `title`) {
+
+  }
+  else if (state == `simulation`) {
+      simulation();
+  }
+  else if (state == `love`) {
+
+  }
+  else if (state == `sadness`) {
+    
+  }
+
+
+
+}
+
+function simulation() {
+  move();
+  checkOffScreen();
+  checkOverlap();
+  display();
+
+}
+//Move circles
+function move() {
   circle1.x = circle1.x + circle1.vx;
   circle1.y = circle1.y + circle1.vy;
 
   circle2.x = circle2.x + circle2.vx;
   circle2.y = circle2.y + circle2.vy;
+}
 
-  //Display circles
+//checkif circles have gone offscreen
+function checkOffScreen() {
+
+  if (circle1.x < 0 || circle1.x > width || circle1.y < 0 || circle1.y > height || circle2.x < 0 || circle2.x > width || circle2.y < 0 || circle2.y > height) {
+
+    //sad ending
+  }
+
+}
+
+//check if circles overlap
+function checkOverlap(){
+
+  let d = dist(circle1.x, circle1.y, circle2.x, circle2.y);
+    if (d < (circle1.size/2 + circle2.size/2) ) {
+    //Love ending
+  };
+
+}
+
+//Display circles
+function display() {
   ellipse(circle1.x,circle1.y,circle1.size);
   ellipse(circle2.x,circle2.y,circle2.size);
 }
