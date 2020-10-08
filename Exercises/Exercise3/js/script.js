@@ -4,7 +4,7 @@ Exercise 03: Love, actually
 Leanne Suen Fa
 
 (x) Allow the user to control one of the circles
-( ) Make the non-user circle move differently
+(x) Make the non-user circle move differently
 ( ) Add at least one extra function, Not including functions any built-in p5 functions like keyPressed()
 ( ) Add at least one extra ending
 ********************************************/
@@ -16,38 +16,72 @@ let circle1 = {
   vx: 0,
   vy: 0,
   speed: 5,
-  noise: 0.003
+  noise: 0.003,
+  fill : {
+    r: 255,
+    g: 255,
+    b: 255,
+  }
 
 }
+
+
 let circle2 = {
   x: 350,
   y: 250,
   size: 50,
   vx: 0,
   vy: 0,
-  speed: 1
+  speed: 1,
+  fill : {
+    r: 255,
+    g: 255,
+    b: 255,
+  }
+
 }
 
 let state =  `title`; // can be title, simulation, love, sadness
+
+
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   setupCircles();
-
 }
 
 function setupCircles() {
   //Position circles
   circle1.x = width/3;
   circle2.x = 2*width/3;
-
-
 }
+
+
 
 function draw() {
   background(0);
 
+  switch (state) {
+    case `title`:
+      title();
+      break;
+
+    case `simulation` :
+      simulation();
+      break;
+
+    case `love` :
+      love();
+      break;
+
+    case `sadness` :
+      sadness();
+      break;
+  }
+
+/**
   if (state == `title`) {
     title();
   }
@@ -60,7 +94,14 @@ function draw() {
   else if (state == `sadness`) {
     sadness();
   }
+**/
 }
+
+
+
+
+
+
 
 function title() {
 
@@ -171,6 +212,7 @@ function display() {
   ellipse(circle2.x,circle2.y,circle2.size);
 }
 
+//Click to start
 function mousePressed() {
   if (state==`title`) {
     state = `simulation`;
