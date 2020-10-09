@@ -12,7 +12,7 @@ let moth = {
     r: 255,
     g: 230,
     b: 250,
-    a : 0
+    a : 100
 
   }
 };
@@ -30,13 +30,22 @@ let bat = {
     b : 5
 
   }
+}
 
-
+let echoLoc = {
+  size : 10,
+  fill : 0,
+  stroke : {
+    r : 0,
+    g : 255,
+    b : 0,
+  }
 }
 
 function setup() {
 createCanvas(windowWidth, windowHeight);
 noStroke();
+noFill();
 
 }
 
@@ -45,6 +54,26 @@ function draw() {
 
 background(21, 53, 61);
 
+move();
+display();
+
+if (mouseIsPressed) {
+  echoLoc.size = echoLoc.size + 50;
+  echoLoc.size = constrain(echoLoc.size, 10, height/2);
+  }
+else  echoLoc.size = 10;
+
+
+
+
+}
+
+
+
+
+
+
+function move(){
   //moth movement
   // //move x
   moth.speed = random(moth.noise, moth.noise*5);
@@ -76,7 +105,10 @@ background(21, 53, 61);
   bat.x = bat.x + bat.vx;
   bat.y = bat.y + bat.vy;
 
+}
 
+
+function display() {
 //Display
   push();
   fill(moth.fill.r, moth.fill.g, moth.fill.b, moth.fill.a);
@@ -87,6 +119,9 @@ background(21, 53, 61);
   fill(bat.fill.r, bat.fill.g, bat.fill.b);
   ellipse(bat.x, bat.y, bat.size);
 
-
-
+  push();
+  noFill();
+  stroke( echoLoc.stroke.r, echoLoc.stroke.g, echoLoc.stroke.b);
+  ellipse(bat.x, bat.y, echoLoc.size);
+  pop();
 }
