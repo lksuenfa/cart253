@@ -56,17 +56,17 @@ background(21, 53, 61);
 
 move();
 display();
-
-if (mouseIsPressed) {
-  echoLoc.size = echoLoc.size + 50;
-  echoLoc.size = constrain(echoLoc.size, 10, height/2);
-  }
-else  echoLoc.size = 10;
+echolocation();
 
 
-
+//EAT moth
+let d = dist(bat.x, bat.y, moth.x, moth.y);
+if (d < bat.size/2 + moth.size/2) {
+  //moth eaten
+}
 
 }
+
 
 
 
@@ -107,6 +107,25 @@ function move(){
 
 }
 
+function echolocation() {
+if (mouseIsPressed) {
+  echoLoc.size = echoLoc.size + 50;
+  echoLoc.size = constrain(echoLoc.size, 10, height/2);
+  }
+else  echoLoc.size = 10;
+
+let d = dist(bat.x, bat.y, moth.x, moth.y);
+
+if (d < echoLoc.size/2 + moth.size/2) {
+  moth.fill.a = 255;
+}
+else moth.fill.a = 0; //moth cannot be seen out of echolocation circle
+
+}
+
+function tree(x = 100, y = 100, size = 100) {
+  rect()
+}
 
 function display() {
 //Display
