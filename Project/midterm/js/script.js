@@ -3,8 +3,9 @@
 // how to produce multiple moving objects
 
 let moth = {
-  x : 0,
-  y : 0,
+  x : 250,
+  y : 250,
+  image: undefined,
   size : 10,
   vx : 0,
   vy : 0,
@@ -23,6 +24,7 @@ let bat = {
   x : 500,
   y : 500,
   size : 50,
+  image: undefined,
   vx : 0,
   vy : 0,
   speed :2,
@@ -52,6 +54,11 @@ image : undefined,
 
 function preload() {
 bkg.image = loadImage("assets/images/nightSky.svg");
+
+moth.image = loadImage("assets/images/moth.png");
+
+bat.image = loadImage("assets/images/bat.png");
+
 }
 
 
@@ -59,6 +66,7 @@ function setup() {
 createCanvas(windowWidth, windowHeight);
 
 noStroke();
+
 
 }
 
@@ -91,6 +99,18 @@ echolocation();
 
 
 function move(){
+
+  // moth.vx = random(-moth.speed, moth.speed);
+  // moth.vy = random(-moth.speed, moth.speed);
+  // moth.x = moth.x + moth.vx;
+  // moth.y = moth.y + moth.vy;
+
+
+
+
+
+
+
   //moth movement
   // //move x
   moth.speed = random(moth.noise, moth.noise*5);
@@ -98,14 +118,21 @@ function move(){
   moth.x = noise(moth.vx);
   moth.x = map(moth.x, 0, 1, 0, width);
 
+
   //moth y
   moth.speed = random(-moth.noise, moth.noise*10);
   moth.vy = moth.vy + moth.speed;
   moth.y = noise(moth.vy);
-  moth.y = map(moth.y, 0, 1, 0, height);
+  moth.y = map(moth.y, 0, 1, 0, height );
+
+// //constrain moth within screen
+//   moth.x = constrain(moth.x, 100, width - 100);
+//   moth.y = constrain (moth.y, 100, height - 100);
 
 
 //move bat
+
+
   if (mouseX > bat.x) {
      bat.vx = bat.speed;
    }
@@ -121,6 +148,8 @@ function move(){
    }
   bat.x = bat.x + bat.vx;
   bat.y = bat.y + bat.vy;
+
+
 
 }
 
@@ -146,13 +175,21 @@ else moth.fill.a = 0; //moth cannot be seen out of echolocation circle
 function display() {
 //Display
   push();
-  fill(moth.fill.r, moth.fill.g, moth.fill.b, moth.fill.a);
-  ellipse(moth.x, moth.y, moth.size);
+  imageMode(CENTER);
+  tint(moth.fill.r, moth.fill.g, moth.fill.b, moth.fill.a);
+  image(moth.image, moth.x, moth.y);
+
+  // fill(moth.fill.r, moth.fill.g, moth.fill.b, moth.fill.a);
+  // ellipse(moth.x, moth.y, moth.size);
   pop();
 
 
-  fill(bat.fill.r, bat.fill.g, bat.fill.b);
-  ellipse(bat.x, bat.y, bat.size);
+  // fill(bat.fill.r, bat.fill.g, bat.fill.b);
+  // ellipse(bat.x, bat.y, bat.size);
+  push();
+  imageMode(CENTER);
+  image(bat.image, bat.x, bat.y);
+  pop();
 
   push();
   noFill();
