@@ -1,4 +1,6 @@
 
+//how do produce objects at random location without it looking like it's changing position randomly
+// how to produce multiple moving objects
 
 let moth = {
   x : 0,
@@ -42,28 +44,43 @@ let echoLoc = {
   }
 }
 
+let bkg = {
+x : 0,
+y : 0,
+image : undefined,
+};
+
+function preload() {
+bkg.image = loadImage("assets/images/nightSky.svg");
+}
+
+
 function setup() {
 createCanvas(windowWidth, windowHeight);
+
 noStroke();
-noFill();
 
 }
 
 
+
 function draw() {
 
-background(21, 53, 61);
+background(10, 27, 38);
+
+image(bkg.image, bkg.x, bkg.y, width, height);
 
 move();
 display();
 echolocation();
 
 
-//EAT moth
-let d = dist(bat.x, bat.y, moth.x, moth.y);
-if (d < bat.size/2 + moth.size/2) {
-  //moth eaten
-}
+// //EAT moth
+// let d = dist(bat.x, bat.y, moth.x, moth.y);
+// if (d < bat.size/2 + moth.size/2) {
+//   //moth eaten
+// }
+//
 
 }
 
@@ -111,7 +128,7 @@ function echolocation() {
 if (mouseIsPressed) {
   echoLoc.size = echoLoc.size + 50;
   echoLoc.size = constrain(echoLoc.size, 10, height/2);
-  }
+}
 else  echoLoc.size = 10;
 
 let d = dist(bat.x, bat.y, moth.x, moth.y);
@@ -123,9 +140,8 @@ else moth.fill.a = 0; //moth cannot be seen out of echolocation circle
 
 }
 
-function tree(x = 100, y = 100, size = 100) {
-  rect()
-}
+
+
 
 function display() {
 //Display
@@ -143,4 +159,7 @@ function display() {
   stroke( echoLoc.stroke.r, echoLoc.stroke.g, echoLoc.stroke.b);
   ellipse(bat.x, bat.y, echoLoc.size);
   pop();
+
+
+
 }
