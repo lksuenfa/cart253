@@ -1,6 +1,4 @@
 
-//how do produce objects at random location without it looking like it's changing position randomly
-// how to produce multiple moving objects
 
 let moth = {
   x : 250,
@@ -10,12 +8,11 @@ let moth = {
   vx : 0,
   vy : 0,
   speed : 10,
-  noise : 0.001,
   fill : {
     r: 255,
     g: 230,
     b: 250,
-    a : 100
+    a : 0
 
   }
 };
@@ -56,45 +53,51 @@ let hungerBar = {
   x : 100,
   y : 100,
   height: 5,
-  active: {
-    width : 250,
-    fill : {
-      r : 255,
-      g : 217,
-      b : 0,
+  width : 500,
+  fill : {
+    r : 89,
+    g : 89,
+    b : 89,
     }
-  },
-  inactive : {
-    width : 500,
-    fill : {
-      r : 89,
-      g : 89,
-      b : 89,
-    }
-  }
 };
+
+let activeHungerBar = {
+  width : 250, //initial hunger
+  maxWidth : 500,
+  fill : {
+    r : 255,
+    g : 217,
+    b : 0,
+  },
+  increment : 150,
+  decrease : 0.1
+}
+
+let state = `title`; //can be title, dead, full, simulation
+
+let crunchSFX;
+
+let bkgMusic;
 
 function preload() {
 bkg.image = loadImage("assets/images/nightSky.svg");
-
 moth.image = loadImage("assets/images/moth.png");
-
 bat.image = loadImage("assets/images/bat.png");
 
+crunchSFX = loadSound("assets/sounds/crunch.mp3");
+bkgMusic = loadSound("assets/sounds/music.mp3");
 }
 
 
 function setup() {
 createCanvas(windowWidth, windowHeight);
-
 noStroke();
 
 //hunger Bar initial appearance
 rectMode(CORNER);
 hungerBar.x = width/8;
 hungerBar.y = height - 50;
-hungerBar.inactive.width = (width - width/4);
-
+hungerBar.width = width/4*3;
 
 }
 
@@ -102,57 +105,99 @@ hungerBar.inactive.width = (width - width/4);
 
 function draw() {
 
-background(10, 27, 38);
-
+//background image
 image(bkg.image, bkg.x, bkg.y, width, height);
 
-move();
-eatMoth();
-display();
-echolocation();
 
+//control screen state according to different lover outcomes
+  switch (state) {
+    case `title`:
+      title();
+      break;
+
+    case `simulation` :
+      simulation();
+      break;
+
+    case `dead` :
+      dead();
+      break;
+
+    case `full` :
+      full();
+      break;
+
+  };
 
 }
 
 
 
+//Display starting message
+function title() {
+
+  push();
+  textSize(64);
+  fill(200,100,100);
+  textAlign(CENTER, CENTER);
+  text(`ORLANDO is hungry.`, width/2, height/2);
+  pop();
+
+}
+
+//Whole game simulation
+function simulation(){
+  move();
+  eatMoth();
+  checkHunger();
+  display();
+  echolocation();
+}
+
+//Display losing message
+function dead(){
+  push();
+  textSize(64);
+  fill(200,100,100);
+  textAlign(CENTER, CENTER);
+  text(`Orlando has died`, width/2, height/2);
+  pop();
+}
+
+//Display winning message
+function full(){
+  push();
+  textSize(64);
+  fill(200,100,100);
+  textAlign(CENTER, CENTER);
+  text(`Orlando will live`, width/2, height/2);
+  pop();
+}
 
 
 
 
+//++++++ GAME SIMULATION +++++++++
 function move(){
+  //moth moves randomly
   moth.vx = random(-moth.speed, moth.speed);
   moth.vy = random(-moth.speed, moth.speed);
 
   moth.x = moth.x + moth.vx;
   moth.y = moth.y + moth.vy;
-  // //moth movement using Perlin noise
-  // //move x
-  // moth.speed = random(moth.noise, moth.noise*5);
-  // moth.vx = moth.vx + moth.speed;
-  // moth.x = noise(moth.vx);
-  // moth.x = map(moth.x, 0, 1, 0, width);
-  //
-  // //moth y
-  // moth.speed = random(-moth.noise, moth.noise*10);
-  // moth.vy = moth.vy + moth.speed;
-  // moth.y = noise(moth.vy);
-  // moth.y = map(moth.y, 0, 1, 0, height );
 
 //constrain moth within screen
   moth.x = constrain(moth.x, 100, width - 100);
   moth.y = constrain (moth.y, 100, height - 100);
 
 
-//move bat
-
+//bat moves following cursor
   if (mouseX > bat.x) {
      bat.vx = bat.speed;
    }
    else if (mouseX < bat.x) {
      bat.vx = -bat.speed;
    }
-
    if (mouseY > bat.y) {
      bat.vy = bat.speed;
    }
@@ -165,80 +210,130 @@ function move(){
 }
 
 function echolocation() {
-
 //if click mouse, echolocation circle enlarges and moth can be seen
+//click mouse, echolocation circle appears
 if (mouseIsPressed) {
+  //echolocation circle increases in size until max
   echoLoc.size = echoLoc.size + 50;
-  echoLoc.size = constrain(echoLoc.size, 10, height/2);
-  //if echolocation circle gets too big, go back to small
+  echoLoc.size = constrain(echoLoc.size, 10, height/2); //max diameter = height/2
+  //creates flashing circles after echolocation circle gets to a certain size
   if (echoLoc.size > 300) {
     echoLoc.size = 10;
   };
 }
+//when mouse not pressed, echolocation circle inactive
 else  echoLoc.size = 10;
 
+//if moth within echolocation circle, it becomes visible
 let d = dist(bat.x, bat.y, moth.x, moth.y);
-
 if (d < echoLoc.size/2 + moth.size/2) {
   moth.fill.a = 255; //no transparency
 }
 else moth.fill.a = 0; //moth cannot be seen out of echolocation circle
-
 }
 
 
+
+
 function eatMoth() {
-//EAT moth
-
-
+//distance between moth and bat
 let d = dist(bat.x, bat.y, moth.x, moth.y);
+
+
 //moth eaten
-if (d < bat.size/2 + moth.size/2) {
+if (d < (bat.size/2 + moth.size/2)) {
 
-//if bat catches moth, stomach fills so hunger bar because more yellow
-hungerBar.active.width = hungerBar.active.width + 100;
-hungerBar.active.width = constrain(hungerBar.active.width, 0, hungerBar.inactive.width);
+  crunchSFX.play();
 
-//moth teleports and bat starts looking again
-moth.x = random(0,width);
-moth.y = random(0,height);
+  //if bat catches moth, stomach fills so hunger bar because more yellow
+  activeHungerBar.width = activeHungerBar.width + activeHungerBar.increment;
 
+  //moth teleports and bat starts looking again
+  moth.x = random(width/3,width);
+  moth.y = random(width/3,height);
+  moth.fill.a = 0;
 
 }
 else  {
   //stomach fullness decreases as bat spends energy looking for moths
-  hungerBar.active.width = hungerBar.active.width - 0.1;
+  activeHungerBar.width = activeHungerBar.width - activeHungerBar.decrease;
+}
+
+activeHungerBar.width = constrain(activeHungerBar.width, 0, hungerBar.width);
+
 
 }
+
+
+function checkHunger() {
+
+  activeHungerBar.maxWidth = hungerBar.width;
+
+//check hunger bar
+  if (activeHungerBar.width === activeHungerBar.maxWidth) {
+   state = `full`;
+ }
+   else if (activeHungerBar.width === 0) {
+  state = `dead`;
+  }
+
 }
+
+function resetGame() {
+activeHungerBar.width = 250;
+}
+
 
 
 function display() {
 //Display
+//Moth
   push();
   imageMode(CENTER);
   tint(moth.fill.r, moth.fill.g, moth.fill.b, moth.fill.a);
   image(moth.image, moth.x, moth.y);
   pop();
 
+//Bat
   push();
   imageMode(CENTER);
   image(bat.image, bat.x, bat.y);
   pop();
 
+//Echolocation circle
   push();
   noFill();
   stroke( echoLoc.stroke.r, echoLoc.stroke.g, echoLoc.stroke.b);
   ellipse(bat.x, bat.y, echoLoc.size);
   pop();
 
+//Inactive hunger bar
   push();
-  fill(hungerBar.inactive.fill.r, hungerBar.inactive.fill.g, hungerBar.inactive.fill.r);
-  rect(hungerBar.x, hungerBar.y, hungerBar.inactive.width, hungerBar.height);
-  pop();
+  fill(hungerBar.fill.r, hungerBar.fill.g, hungerBar.fill.r);
+  rect(hungerBar.x, hungerBar.y, hungerBar.width, hungerBar.height);
 
-  push();
-  fill(hungerBar.active.fill.r, hungerBar.active.fill.g, hungerBar.active.fill.b);
-  rect(hungerBar.x, hungerBar.y, hungerBar.active.width, hungerBar.height);
+//Active hunger bar
+  fill(activeHungerBar.fill.r, activeHungerBar.fill.g, activeHungerBar.fill.b);
+  rect(hungerBar.x, hungerBar.y, activeHungerBar.width, hungerBar.height);
   pop();
+}
+
+
+//Click to start
+function mousePressed() {
+  if (state ==`title`) {
+    state = `simulation`;
+  }
+  else if (state == `dead`|| state == `full`) {
+    state = `title`;
+    resetGame();
+  }
+music();
+}
+
+//Loop background music
+function music(){
+  if (!bkgMusic.isPlaying()){
+    bkgMusic.loop();
+  }
 }
