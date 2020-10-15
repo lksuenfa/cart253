@@ -69,7 +69,7 @@ let activeHungerBar = {
     g : 217,
     b : 0,
   },
-  increment : 150,
+  increment : 250,
   decrease : 0.1
 }
 
@@ -78,6 +78,9 @@ let state = `title`; //can be title, dead, full, simulation
 let crunchSFX;
 
 let bkgMusic;
+
+
+
 
 function preload() {
 bkg.image = loadImage("assets/images/nightSky.svg");
@@ -98,6 +101,7 @@ rectMode(CORNER);
 hungerBar.x = width/8;
 hungerBar.y = height - 50;
 hungerBar.width = width/4*3;
+
 
 }
 
