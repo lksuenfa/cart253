@@ -139,11 +139,11 @@ function title() {
   textSize(66);
   fill(109, 151, 181);
   textAlign(CENTER, CENTER);
-  text(`ORLANDO is hungry`, width/2, height/2 - 80);
+  text(`ORLANDO is hungry.`, width/2, height/2 - 20);
 
 
-  textSize(26);
-  text(`Help the little bat find yummy moths by \n scanning the area using echolocation.`, width/2, height/2 );
+  textSize(22);
+  text(`Help the little bat find yummy moths by \n scanning the area with echolocation.`, width/2, height/2 + 50 );
 
   textSize(20);
   fill(235, 222, 162);
@@ -171,36 +171,36 @@ function dead(){
 
 
   push();
-  background(255);
+  background(220);
 
-  textSize(64);
+  textSize(66);
   fill(114, 133, 143);
   textAlign(CENTER, CENTER);
-  text(`Orlando has died.`, width/2, height/2 - 100);
+  text(`Orlando has died.`, width/2, height/2 - 50);
 
-  textSize(26);
-  text(`Because of hunger, his body grew \n weaker and weaker. As he exhaled his\n last breath, he wished for the world on the\n  other side to be warmer and kinder.`, width/2, height/2 );
+  textSize(22);
+  text(`Because of hunger, his body grew \n weaker and weaker. As he exhaled his\n last breath, he wished for the world on the\n  other side to be warmer and kinder.`, width/2, height/2 + 50 );
 
   textSize(20);
-  fill(247, 209, 82)
-  text(`Click to <RESTART>`, width/2, height/2 + 150);
+  fill(219, 167, 22)
+  text(`Click to RESTART`, width/2, height/2 + 150);
   pop();
 }
 
 //Display winning message
 function full(){
   push();
-  textSize(64);
+  textSize(66);
   fill(242, 174, 174);
   textAlign(CENTER, CENTER);
-  text(`Orlando will live.`, width/2, height/2 - 100);
+  text(`Orlando will live.`, width/2, height/2 - 30);
 
-  textSize(26);
-  text(`Now that he's full, he's can go home, \n take a bath, snuggle under his blanket and  \nrest before the next day of survival`, width/2, height/2 );
+  textSize(22);
+  text(`Now that he's full, he can go home, \n take a bath, snuggle under his blanket and  \nrest before the next day of survival`, width/2, height/2 + 50);
 
   textSize(20);
   fill(235, 222, 162)
-  text(`Click to <RESTART>`, width/2, height/2 + 150);
+  text(`Click to RESTART`, width/2, height/2 + 150);
 
 
   pop();
@@ -283,6 +283,8 @@ if (d < (bat.size/2 + moth.size/2)) {
   //moth teleports and bat starts looking again
   moth.x = random(width/3,width);
   moth.y = random(width/3,height);
+
+  //moth becomes transparent again
   moth.fill.a = 0;
 
 }
@@ -290,6 +292,8 @@ else  {
   //stomach fullness decreases as bat spends energy looking for moths
   activeHungerBar.width = activeHungerBar.width - activeHungerBar.decrease;
 }
+
+//active hunger bar should be placed on top of the hunger bar
 
 activeHungerBar.width = constrain(activeHungerBar.width, 0, hungerBar.width);
 
@@ -299,12 +303,16 @@ activeHungerBar.width = constrain(activeHungerBar.width, 0, hungerBar.width);
 
 function checkHunger() {
 
+//active hunger bar is limited in size, max = hunger bar
   activeHungerBar.maxWidth = hungerBar.width;
 
 //check hunger bar
+//if hunger reaches max
   if (activeHungerBar.width === activeHungerBar.maxWidth) {
    state = `full`;
  }
+
+ //if hunger is min
    else if (activeHungerBar.width === 0) {
   state = `dead`;
   }
@@ -312,7 +320,7 @@ function checkHunger() {
 }
 
 function resetGame() {
-activeHungerBar.width = 250;
+activeHungerBar.width = 250; //reset initial value of hunger
 }
 
 
