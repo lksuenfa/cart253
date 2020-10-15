@@ -105,8 +105,7 @@ hungerBar.width = width/4*3;
 
 function draw() {
 
-//background image
-image(bkg.image, bkg.x, bkg.y, width, height);
+background(0);
 
 
 //control screen state according to different lover outcomes
@@ -137,30 +136,54 @@ image(bkg.image, bkg.x, bkg.y, width, height);
 function title() {
 
   push();
-  textSize(64);
-  fill(200,100,100);
+  textSize(66);
+  fill(109, 151, 181);
   textAlign(CENTER, CENTER);
-  text(`ORLANDO is hungry.`, width/2, height/2);
+  text(`ORLANDO is hungry`, width/2, height/2 - 80);
+
+
+  textSize(26);
+  text(`Help the little bat find yummy moths by \n scanning the area using echolocation.`, width/2, height/2 );
+
+  textSize(20);
+  fill(235, 222, 162);
+  text(`Click to START`, width/2, height/2 + 150);
   pop();
 
 }
 
 //Whole game simulation
 function simulation(){
+  //background image
+  image(bkg.image, bkg.x, bkg.y, width, height);
+
   move();
   eatMoth();
   checkHunger();
   display();
   echolocation();
+
+
 }
 
 //Display losing message
 function dead(){
+
+
   push();
+  background(255);
+
   textSize(64);
-  fill(200,100,100);
+  fill(114, 133, 143);
   textAlign(CENTER, CENTER);
-  text(`Orlando has died`, width/2, height/2);
+  text(`Orlando has died.`, width/2, height/2 - 100);
+
+  textSize(26);
+  text(`Because of hunger, his body grew \n weaker and weaker. As he exhaled his\n last breath, he wished for the world on the\n  other side to be warmer and kinder.`, width/2, height/2 );
+
+  textSize(20);
+  fill(247, 209, 82)
+  text(`Click to <RESTART>`, width/2, height/2 + 150);
   pop();
 }
 
@@ -168,9 +191,18 @@ function dead(){
 function full(){
   push();
   textSize(64);
-  fill(200,100,100);
+  fill(242, 174, 174);
   textAlign(CENTER, CENTER);
-  text(`Orlando will live`, width/2, height/2);
+  text(`Orlando will live.`, width/2, height/2 - 100);
+
+  textSize(26);
+  text(`Now that he's full, he's can go home, \n take a bath, snuggle under his blanket and  \nrest before the next day of survival`, width/2, height/2 );
+
+  textSize(20);
+  fill(235, 222, 162)
+  text(`Click to <RESTART>`, width/2, height/2 + 150);
+
+
   pop();
 }
 
@@ -323,12 +355,14 @@ function display() {
 function mousePressed() {
   if (state ==`title`) {
     state = `simulation`;
+    music();
   }
+  //reset game if lost or won
   else if (state == `dead`|| state == `full`) {
     state = `title`;
-    resetGame();
+    resetGame(); //hunger bar starts at original level again
   }
-music();
+
 }
 
 //Loop background music
