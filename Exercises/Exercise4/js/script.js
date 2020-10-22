@@ -1,5 +1,8 @@
 "use strict";
 
+let school = []; // Create an empty array and assign it to the school variable
+let schoolSize = 4; //length of array
+
 // Our fish
 let fish1;
 let fish2;
@@ -10,10 +13,10 @@ function setup() {
   createCanvas(600, 600);
 
   // Create four fish, positioned randomly
-  fish1 = createFish(random(0, width), random(0, height));
-  fish2 = createFish(random(0, width), random(0, height));
-  fish3 = createFish(random(0, width), random(0, height));
-  fish4 = createFish(random(0, width), random(0, height));
+
+  for (let i = 0; i < schoolSize; i++) {
+    school[i] = createFish(random(0, width), random(0, height));
+  }
 }
 
 // createFish(x,y)
@@ -35,15 +38,19 @@ function createFish(x, y) {
 function draw() {
   background(0);
 
-  moveFish(fish1);
-  moveFish(fish2);
-  moveFish(fish3);
-  moveFish(fish4);
+  // Use a for loop to count from 0 up to 3
+  // and move the fish at that index in the schools array each time
+  for (let i = 0; i < school.length; i++) {
+    // Use i as the index to get the current fish to move
+    // The first time i will be 0, the second time 1, then 2, then 3
+    // Move the fish!
+    moveFish(school[i]);
+  }
 
-  displayFish(fish1);
-  displayFish(fish2);
-  displayFish(fish3);
-  displayFish(fish4);
+  // Same again for displaying
+  for (let i = 0; i < school.length; i++) {
+    displayFish(school[i]);
+  }
 }
 
 // moveFish(fish)
@@ -73,4 +80,11 @@ function displayFish(fish) {
   noStroke();
   ellipse(fish.x, fish.y, fish.size);
   pop();
+}
+
+function mousePressed() {
+  let fish = createFish(mouseX, mouseY); // Create a fish at the mouse position
+  school.push(fish); // Add the fish to our array
+  // Now the school array has our new fish and it will be moved and drawn
+  // with all the others in the for loop!
 }
