@@ -1,16 +1,45 @@
+// ( ) Add a user-controlled shape (or image)
+// ( ) Make the user interact with the fish
+// ( ) Change the fish (or whatever) creation
+// ( ) Add at least two endings
+
 "use strict";
 
 let school = []; // Create an empty array and assign it to the school variable
 let schoolSize = 4; //length of array
 
-// Our fish
-let fish1;
-let fish2;
-let fish3;
-let fish4;
+let cupid = {
+  x: 0,
+  y: 0,
+  image: undefined,
+};
+// createFish(x,y)
+// Creates a new JavaScript Object describing a fish and returns it
+function createFish(x, y, r, g, b) {
+  let fish = {
+    x: x,
+    y: y,
+    image: undefined,
+    size: 50,
+    vx: 0,
+    vy: 0,
+    speed: 2,
+    fill: {
+      r: r,
+      g: 150,
+      b: 150,
+    },
+  };
+  return fish;
+}
+
+function preload() {
+  // fish.image = loadImage("assets/images/fish1.svg");
+  cupid.image = loadImage("assets/images/cupid.svg");
+}
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(windowWidth, windowHeight);
 
   // Create four fish, positioned randomly
 
@@ -19,24 +48,10 @@ function setup() {
   }
 }
 
-// createFish(x,y)
-// Creates a new JavaScript Object describing a fish and returns it
-function createFish(x, y) {
-  let fish = {
-    x: x,
-    y: y,
-    size: 50,
-    vx: 0,
-    vy: 0,
-    speed: 2,
-  };
-  return fish;
-}
-
 // draw()
 // Moves and displays our fish
 function draw() {
-  background(0);
+  background(230, 236, 237); //grey
 
   // Use a for loop to count from 0 up to 3
   // and move the fish at that index in the schools array each time
@@ -51,6 +66,12 @@ function draw() {
   for (let i = 0; i < school.length; i++) {
     displayFish(school[i]);
   }
+
+  //move cupid
+  imageMode(CENTER);
+  cupid.x = mouseX;
+  cupid.y = mouseY;
+  image(cupid.image, cupid.x, cupid.y, 70, 50);
 }
 
 // moveFish(fish)
@@ -76,9 +97,13 @@ function moveFish(fish) {
 // Displays the provided fish on the canvas
 function displayFish(fish) {
   push();
-  fill(200, 100, 100);
+  fish.fill.r = random(0, 255);
+  // fish.fill.b = random(0, 255);
+  // fish.fill.g = random(0, 255);
+  fill(fish.fill.r, fish.fill.g, fish.fill.b);
   noStroke();
   ellipse(fish.x, fish.y, fish.size);
+  // image(fish.image, fish.x, fish.y);
   pop();
 }
 
