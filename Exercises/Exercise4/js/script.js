@@ -1,7 +1,7 @@
 // (x ) Add a user-controlled shape (or image)
 // (x ) Make the user interact with the fish
 // (x ) Change the fish (or whatever) creation
-// ( ) Add at least two endings
+// (x ) Add at least two endings
 
 "use strict";
 
