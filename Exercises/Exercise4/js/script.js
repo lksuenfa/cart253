@@ -6,37 +6,45 @@
 "use strict";
 
 let school = []; // Create an empty array and assign it to the school variable
-let schoolSize = 50; //length of array
+let schoolSize = 120; //length of array
 
 let cupid = {
   x: 500,
   y: 500,
+  size: 70,
   vy: 0,
   vy: 0,
-  speed: 1,
+  speed: 0.5,
   image: undefined,
 };
-let specialFish1 = {
+
+let yourFish = {
   x: 250,
   y: 250,
-  vy: 0,
-  vy: 0,
-  speed: 1,
-  image: undefined,
-};
-let specialFish2 = {
-  x: 50,
-  y: 50,
+  size: 50,
   vy: 0,
   vy: 0,
   speed: 1,
   image: undefined,
 };
 
+let enemyFish = {
+  x: 50,
+  y: 50,
+  size: 50,
+  vy: 0,
+  vy: 0,
+  speed: 1,
+  image: undefined,
+};
+
+let state = `title`; //endings can be win or loss
+
+//Preload images
 function preload() {
   cupid.image = loadImage("assets/images/cupid.svg");
-  specialFish1.image = loadImage("assets/images/specialFish1.svg");
-  specialFish2.image = loadImage("assets/images/specialFish2.svg");
+  yourFish.image = loadImage("assets/images/specialFish1.svg");
+  enemyFish.image = loadImage("assets/images/specialFish2.svg");
 }
 
 function setup() {
@@ -48,7 +56,7 @@ function setup() {
   }
 }
 
-// createFish(x,y)
+//create fish
 // Creates a new JavaScript Object describing a fish and returns it
 function createFish(x, y, r) {
   let fish = {
@@ -57,7 +65,7 @@ function createFish(x, y, r) {
     size: 50,
     vx: 0,
     vy: 0,
-    speed: 1,
+    speed: 0.5,
     fill: {
       r: r,
       g: 150,
@@ -73,6 +81,88 @@ function createFish(x, y, r) {
 function draw() {
   background(230, 236, 237); //grey
 
+  simulation();
+
+  switch (state) {
+    case `title`:
+      title();
+      break;
+
+    case `simulation`:
+      simulation();
+      break;
+
+    case `win`:
+      win();
+      break;
+
+    case `loss`:
+      loss();
+      break;
+  }
+}
+
+//Display title message
+function title() {
+  push();
+  background(230, 236, 237);
+  textSize(30);
+  fill(109, 151, 181);
+  textAlign(CENTER, CENTER);
+  text(
+    `You're UGLY, all fish will try to stay away from you. \n Find your fish before somewhere else takes it`,
+    width / 2,
+    height / 2
+  );
+
+  textSize(20);
+  text(`Click to start`, width / 2, height / 2 + 100);
+  pop();
+}
+
+//Display winning message
+function win() {
+  push();
+  background(230, 236, 237, 150);
+  textSize(30);
+  fill(109, 151, 181);
+  textAlign(CENTER, CENTER);
+  text(`You found your special fish <3`, width / 2, height / 2);
+  pop();
+}
+
+//Display losing message
+function loss() {
+  push();
+  background(230, 236, 237, 150);
+  textSize(30);
+  fill(109, 151, 181);
+  textAlign(CENTER, CENTER);
+  text(`Forever single fish :(`, width / 2, height / 2);
+  pop();
+}
+
+// Find your special fish
+function winFish() {
+  //if user touches
+  let d = dist(cupid.x, cupid.y, yourFish.x, yourFish.y);
+
+  if (d < cupid.size / 2 + yourFish.size / 2) {
+    state = `win`;
+  }
+}
+// Lose your special fish to another special fish
+function loseFish() {
+  //if user touches
+  let d = dist(enemyFish.x, enemyFish.y, yourFish.x, yourFish.y);
+
+  if (d < enemyFish.size / 2 + enemyFish.size / 2) {
+    state = `lose`;
+  }
+}
+
+//Game simulation
+function simulation() {
   // Use a for loop to count from 0 up to 3
   // and move the fish at that index in the schools array each time
   for (let i = 0; i < school.length; i++) {
@@ -89,13 +179,17 @@ function draw() {
 
   //Cupid movement and display
   moveCupid();
-  displayCupid();
 
   //specialFish
+  moveFish(yourFish);
+  moveFish(enemyFish);
 
-  moveFish(specialFish1);
-  moveFish(specialFish2);
-  displaySpecialFish();
+  //display user and special fish
+  display();
+
+  //states
+  winFish();
+  loseFish();
 }
 
 // moveFish(fish)
@@ -110,12 +204,12 @@ function moveFish(fish) {
 
   //reset position of fish to random if it reaches the canvas borders
   if (fish.x === 0 || fish.x === width) {
-    fish.vx = random(0, width);
+    fish.x = random(0, width);
   } else if (fish.y === 0 || fish.y === height) {
     fish.y = random(0, height);
   }
 
-  //  Move the fish
+  //  Move the fish away from user
   if (mouseX > fish.x) {
     fish.vx = -fish.speed;
   } else if (mouseX < fish.x) {
@@ -164,19 +258,21 @@ function moveCupid() {
   cupid.y = cupid.y + cupid.vy;
 }
 
-function displayCupid() {
+//Display
+function display() {
   imageMode(CENTER);
-  image(cupid.image, cupid.x, cupid.y, 70, 50);
-}
-
-function displaySpecialFish() {
-  image(specialFish1.image, specialFish1.x, specialFish1.y);
-  image(specialFish2.image, specialFish2.x, specialFish2.y);
+  image(cupid.image, cupid.x, cupid.y, cupid.size, cupid.size - 20);
+  image(yourFish.image, yourFish.x, yourFish.y, yourFish.size);
+  image(enemyFish.image, enemyFish.x, enemyFish.y, enemyFish.size);
 }
 
 function mousePressed() {
-  let fish = createFish(mouseX, mouseY); // Create a fish at the mouse position
-  school.push(fish); // Add the fish to our array
-  // Now the school array has our new fish and it will be moved and drawn
-  // with all the others in the for loop!
+  //change state at first mouse click to begin game
+  if (state == `title`) {
+    state = `simulation`;
+  }
+  // let fish = createFish(mouseX, mouseY); // Create a fish at the mouse position
+  // school.push(fish); // Add the fish to our array
+  // // Now the school array has our new fish and it will be moved and drawn
+  // // with all the others in the for loop!
 }
