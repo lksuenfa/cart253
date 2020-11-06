@@ -16,7 +16,7 @@ class Cloud {
     this.x = this.x + this.speed;
     this.x = constrain(this.x, 0, width);
 
-    if (this.x === width) {
+    if (this.x > width + 50) {
       this.x = 0;
     }
   }

@@ -1,3 +1,14 @@
+/**************************************************
+Final project prototype
+Leanne Suen Fa
+
+For this prototype, I have successfully connected the game to openweathermap API giving certain a number of clouds depending on how cloudy the real weather is.
+
+I have also successfully gotten a change in the sky colour according to the time of the Day
+
+I did not succeed in using superclasses and subclasses for the plant growth and will need to work more on that aspect of the project.
+**************************************************/
+
 "use strict";
 
 // For prototype, we will montreal as default city
@@ -201,9 +212,4 @@ function convertUnix(unixTime) {
   let min = "0" + date.getMinutes();
   let time = hour + min.substr(-2) / 60;
   return time;
-}
-
-// DOES NOT WORK
-function mousePressed() {
-  grass.stemLength = grass.stemLegth + grass.growthRate;
 }
