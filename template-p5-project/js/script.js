@@ -1,20 +1,11 @@
-/**************************************************
-Template p5 project
-Pippin Barr
+"use strict";
 
-Here is a description of this template p5 project.
-**************************************************/
+function preload() {}
 
-// setup()
-//
-// Description of setup() goes here.
 function setup() {
-
+  createCanvas(600, 600);
 }
 
-// draw()
-//
-// Description of draw() goes here.
 function draw() {
-
+  background(0);
 }
