@@ -106,6 +106,7 @@ function display() {
       drop.grow();
       drop.move();
 
+      //if leaves screen remove from array
       if (drop.x > width || drop.x < 0 || drop.y < 0 || drop.y > height) {
         sundewDrops.drops.splice(i, 1);
       }
