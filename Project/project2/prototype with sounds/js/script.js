@@ -1,17 +1,9 @@
 /**************************************************
-Final project prototype
+Prototype with sound experiment
 Leanne Suen Fa
-
-For this prototype, I have successfully connected the game to openweathermap API giving certain a number of clouds depending on how cloudy the real weather is.
-
-I have also successfully gotten a change in the sky colour according to the time of the Day
-
-I did not succeed in using superclasses and subclasses for the plant growth and will need to work more on that aspect of the project.
 **************************************************/
 
 "use strict";
-
-// For prototype, we will montreal as default city
 
 let weatherData;
 let weatherURL =
@@ -60,34 +52,13 @@ let cloudySky = {
 
 let rock = {
   x: 200,
-  y: 650,
-  size: 300,
-  height: 200,
-  colour: 99,
-};
-
-// DOES NOT WORK
-// let addGrass = {
-//   grassArray: [],
-//   numGrass: 10,
-// };
-
-let grass = {
-  x: 250,
-  y: 250,
-  color: {
-    r: 37,
-    g: 138,
-    b: 116,
-  },
-  stemLength: 15,
-  stemThickness: 10,
-  growthRate: 0.01,
-  maxHeight: 50,
+  y: 570,
+  img: undefined,
 };
 
 function preload() {
   weatherData = loadJSON(weatherURL);
+  rock.img = loadImage("assets/images/rock.png");
 }
 
 function setup() {
@@ -112,45 +83,14 @@ function setup() {
     let cloud = new Cloud();
     cloudySky.clouds.push(cloud);
   }
-  // DOES NOT WORK
-  // Add grass
-  // for (let i = 0; i < addGrass.numGrass; i++) {
-  //   let x = random(150, 500);
-  //   let y = random(550, 600);
-  //   let grass = new Grass(x, y);
-  //   addGrass.grassArray.push(grass);
-  // }
-  grass.x = random(150, 300);
-  grass.y = random(550, 600);
 }
 
 function draw() {
   skyColour();
   displayClouds();
 
-  push();
-  fill(rock.colour);
-  ellipse(rock.x, rock.y, rock.size, rock.height);
-  pop();
-
-  if (grass.stemLength < grass.maxHeight) {
-    grass.stemLength = grass.stemLength + grass.growthRate;
-    grass.y = grass.y - grass.growthRate;
-  }
-
-  push();
-  noStroke();
-  stroke(57, 219, 184);
-  strokeWeight(grass.stemThickness);
-  line(grass.x, grass.y, grass.x, grass.y + grass.stemLength);
-  pop();
-
-  // DOES NOT WORK
-  // for (let i = 0; i < addGrass.length; i++) {
-  //   let grass = grassArray[i];
-  //   grass.grow();
-  //   grass.display();
-  // }
+  imageMode(CENTER);
+  image(rock.img, rock.x, rock.y, 300, 200);
 }
 
 //Change background colour according to local time,
