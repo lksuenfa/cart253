@@ -15,7 +15,7 @@ I did not succeed in using superclasses and subclasses for the plant growth and 
 
 let weatherData;
 let weatherURL =
-  "http://api.openweathermap.org/data/2.5/weather?q=montreal&units=metric&appid=f1980699c5ed03fcc2acd671a112e5c3";
+  "https://api.openweathermap.org/data/2.5/weather?q=montreal&units=metric&appid=f1980699c5ed03fcc2acd671a112e5c3";
 
 let localTime = {
   hour: 0,

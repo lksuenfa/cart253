@@ -1,13 +1,8 @@
-/**************************************************
-Prototype with sound experiment
-Leanne Suen Fa
-**************************************************/
-
 "use strict";
 
 let weatherData;
 let weatherURL =
-  "http://api.openweathermap.org/data/2.5/weather?q=montreal&units=metric&appid=f1980699c5ed03fcc2acd671a112e5c3";
+  "https://api.openweathermap.org/data/2.5/weather?q=montreal&units=metric&appid=f1980699c5ed03fcc2acd671a112e5c3";
 
 let localTime = {
   hour: 0,
@@ -19,7 +14,6 @@ let weather = {
   sunrise: 0,
   sunset: 0,
   temperature: 0,
-  clouds: 0,
 };
 
 let sky = {
@@ -46,8 +40,10 @@ let sky = {
 };
 
 let cloudySky = {
-  clouds: [],
-  numClouds: 5,
+  images: [],
+  numClouds: 0,
+  displayClouds: undefined,
+  totalClouds: 4,
 };
 
 let rock = {
@@ -56,14 +52,31 @@ let rock = {
   img: undefined,
 };
 
+let ground = {
+  x: 0,
+  y: 600,
+  fill: {
+    r: 94,
+    b: 125,
+    g: 103,
+  },
+  height: 100,
+};
+
 function preload() {
   weatherData = loadJSON(weatherURL);
   rock.img = loadImage("assets/images/rock.png");
+
+  //load cloud images
+  for (let i = 0; i < cloudySky.totalClouds; i++) {
+    let loadCloudImage = loadImage(`assets/images/clouds/cloud${i}.png`);
+    cloudySky.images.push(loadCloudImage);
+  }
 }
 
 function setup() {
   createCanvas(400, 700);
-  noStroke();
+  userStartAudio();
 
   //Call weather data
   weather.temperature = weatherData.main.temp;
@@ -80,15 +93,30 @@ function setup() {
   //create cloudy sky
   checkClouds();
   for (let i = 0; i < cloudySky.numClouds; i++) {
-    let cloud = new Cloud();
+    let x = random(-100, 0);
+    let y = random(100, 300);
+
+    let cloud = new Cloud(x, y);
     cloudySky.clouds.push(cloud);
   }
 }
 
 function draw() {
+  background(70, 88, 117);
   skyColour();
-  displayClouds();
 
+  display();
+}
+
+function display() {
+  //display ground
+  push();
+  noStroke();
+  fill(ground.fill.r, ground.fill.g, ground.fill.r);
+  rect(ground.x, ground.y, width, ground.height);
+  pop();
+
+  //display rock
   imageMode(CENTER);
   image(rock.img, rock.x, rock.y, 300, 200);
 }
@@ -122,19 +150,6 @@ function skyColour() {
     localTime.total < weather.sunrise
   ) {
     background(sky.night.r, sky.night.g, sky.night.b); //night blue
-  }
-}
-//create cloudy sky
-function checkClouds() {
-  //amount of clouds appearing depend on cloud data from openweathermap
-  if (weather.clouds <= 25) {
-    cloudySky.numClouds = 0;
-  } else if (weather.clouds > 25 && weather.clouds < 50) {
-    cloudySky.numClouds = 2;
-  } else if (weather.clouds > 50 && weather.clouds < 75) {
-    cloudySky.numClouds = 4;
-  } else {
-    cloudySky.numClouds = 6;
   }
 }
 
