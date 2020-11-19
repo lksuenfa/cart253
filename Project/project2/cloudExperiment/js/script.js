@@ -5,15 +5,21 @@ let weatherURL =
   "https://api.openweathermap.org/data/2.5/weather?q=montreal&units=metric&appid=f1980699c5ed03fcc2acd671a112e5c3";
 
 // Cloudy sky parameters
-let cloudImages = []; //array to store cloud images
-let numCloudImages = 4; //number of images avaialable
-let numClouds; //number of clouds according to weather data
+let clouds = []; //array to store cloud images
+let numCloudImages = 4;
+let numClouds = 0;
+let cloudData;
 
 // Sky condition
 let sunset;
 let sunrise;
 let cloudy;
 let sky;
+
+// raining
+let rain = []; //rain array
+let rainIntensity = 0; //size of rain array
+let checkRain = false;
 
 // Ground
 let ground;
@@ -48,7 +54,7 @@ function preload() {
   // load cloud images
   for (let i = 0; i < numCloudImages; i++) {
     let loadCloudImage = loadImage(`assets/images/clouds/cloud${i}.png`);
-    cloudImages.push(loadCloudImage);
+    clouds.push(loadCloudImage);
   }
 }
 
@@ -59,12 +65,27 @@ function setup() {
   sunrise = convertUnix(weatherData.sys.sunrise);
   sunset = convertUnix(weatherData.sys.sunset);
 
+  //call cloud percentage data
+  cloudData = weatherData.clouds.all;
+
   // call weather data for temp
   temperature = weatherData.main.temp;
 
   //if cloudy then cloudy is true
-  if (weatherData.weather.main === "Clouds") {
-    cloudy === true;
+  // if (weatherData.weather.main === "Clouds") {
+  //   cloudy = true;
+
+  if (true) {
+    console.log(cloudy);
+
+    // make a certain number of clouds appear
+    checkClouds();
+    for (let i = 0; i < numClouds; i++) {
+      let x = random(-100, 0);
+      let y = random(100, 300);
+      let cloud = new Cloud(x, y);
+      clouds.push(cloud);
+    }
   }
 
   //Call pc time
@@ -85,18 +106,42 @@ function draw() {
   ground = new Ground(localTime, dayOfMonth, month, sunset, sunrise);
   ground.changeSeasons();
 
+  // display raining
+
   // display rock
   imageMode(CENTER);
   image(rock.img, rock.x, rock.y, rock.width, rock.height);
 
-  // display WeatherInfo
+  // display Weather Info
   displayInfo = new WeatherInfo(temperature, hour, minute, dayOfMonth, month);
   displayInfo.displayTime();
   displayInfo.displayCity();
   displayInfo.displayTemp();
   displayInfo.displayDate();
+
+  // display Clouds
+  for (let i = 0; i < clouds.length; i++) {
+    let cloud = clouds[i];
+    cloud.display();
+    cloud.move();
+  }
 }
 
+//check cloud percentage to know how many clouds to display
+function checkClouds() {
+  //amount of clouds appearing depend on cloud data % from openweathermap
+  if (cloudData <= 10) {
+    numClouds = 0;
+  } else if (cloudData > 10 && cloudData < 25) {
+    numClouds = 1;
+  } else if (cloudData > 25 && cloudData < 50) {
+    numClouds = 2;
+  } else if (cloudData > 50 && cloudData < 75) {
+    numClouds = 4;
+  } else {
+    numClouds = 6;
+  }
+}
 // Convert unix time code to regular time
 function convertUnix(unixTime) {
   let date = new Date(unixTime * 1000);
