@@ -37,7 +37,7 @@ class Sky {
   //Change background colour according to local time,
   skyColour() {
     // check cloudy sky
-    if (this.cloudy === true) {
+    if (this.cloudy == true) {
       //cloudy day sky
       if (this.localTime > this.sunrise && this.localTime < this.sunset) {
         background(this.cloudyDay); //pale grey
@@ -49,7 +49,7 @@ class Sky {
       }
     }
     //if sky is not cloudy
-    else if (this.cloudy === false) {
+    else if (this.cloudy == false) {
       // Dawn last 1h after sunrise
       if (this.localTime >= this.sunrise && this.localTime < this.sunrise + 1) {
         background(this.dawn.r, this.dawn.g, this.dawn.b); //dawn

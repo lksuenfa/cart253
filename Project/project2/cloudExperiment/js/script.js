@@ -4,8 +4,11 @@ let weatherData;
 let weatherURL =
   "https://api.openweathermap.org/data/2.5/weather?q=montreal&units=metric&appid=f1980699c5ed03fcc2acd671a112e5c3";
 
+let weatherState;
+
 // Cloudy sky parameters
-let clouds = []; //array to store cloud images
+let clouds = []; //array to store cloud
+let cloudImages = []; //array to store cloud images
 let numCloudImages = 4;
 let numClouds = 0;
 let cloudData;
@@ -54,12 +57,15 @@ function preload() {
   // load cloud images
   for (let i = 0; i < numCloudImages; i++) {
     let loadCloudImage = loadImage(`assets/images/clouds/cloud${i}.png`);
-    clouds.push(loadCloudImage);
+    cloudImages.push(loadCloudImage);
   }
 }
 
 function setup() {
   createCanvas(400, 700);
+
+  // general weather
+  weatherState = weatherData.weather.main;
 
   // call weather data for sky condition
   sunrise = convertUnix(weatherData.sys.sunrise);
@@ -72,20 +78,21 @@ function setup() {
   temperature = weatherData.main.temp;
 
   //if cloudy then cloudy is true
-  // if (weatherData.weather.main === "Clouds") {
-  //   cloudy = true;
+  if (cloudData > 84) {
+    cloudy = true;
+  } else cloudy = false;
 
-  if (true) {
-    console.log(cloudy);
+  // if (true) {
+  //   console.log(cloudy);
 
-    // make a certain number of clouds appear
-    checkClouds();
-    for (let i = 0; i < numClouds; i++) {
-      let x = random(-100, 0);
-      let y = random(100, 300);
-      let cloud = new Cloud(x, y);
-      clouds.push(cloud);
-    }
+  // make a certain number of clouds appear
+  checkClouds();
+  for (let i = 0; i < numClouds; i++) {
+    let x = random(0, 100);
+    let y = random(100, 300);
+    let cloudImage = random(cloudImages);
+    let cloud = new Cloud(x, y);
+    clouds.push(cloud);
   }
 
   //Call pc time
@@ -133,13 +140,13 @@ function checkClouds() {
   if (cloudData <= 10) {
     numClouds = 0;
   } else if (cloudData > 10 && cloudData < 25) {
-    numClouds = 1;
+    numClouds = 1; //few clouds: 11-25%
   } else if (cloudData > 25 && cloudData < 50) {
-    numClouds = 2;
-  } else if (cloudData > 50 && cloudData < 75) {
-    numClouds = 4;
+    numClouds = 2; //scattered clouds: 25-50%
+  } else if (cloudData > 50 && cloudData < 85) {
+    numClouds = 4; //	broken clouds: 51-84%
   } else {
-    numClouds = 6;
+    numClouds = 6; //	overcast clouds: 85-100%
   }
 }
 // Convert unix time code to regular time

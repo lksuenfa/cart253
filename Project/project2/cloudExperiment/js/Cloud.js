@@ -1,10 +1,10 @@
 class Cloud {
-  constructor(x, y) {
+  constructor(x, y, cloudImage) {
     this.x = x;
     this.y = y;
     this.size = 50;
-    this.speed = 0.1;
-    this.cloudImageNum = random(0, 4);
+    this.speed = random(0.1, 0.3);
+    this.cloudImage = cloudImage;
   }
 
   move() {
@@ -18,6 +18,6 @@ class Cloud {
 
   display() {
     imageMode(CENTER);
-    image(clouds[this.cloudImageNum], this.x, this.y);
+    image(this.cloudImage, this.x, this.y);
   }
 }
