@@ -35,7 +35,7 @@ class WeatherInfo {
     this.textFont = `Noto Sans`;
 
     // display positioning
-    this.x = 230;
+    this.x = width - 150;
     this.y = 75;
   }
 
@@ -86,7 +86,7 @@ class WeatherInfo {
     push();
     fill(this.pink.r, this.pink.g, this.pink.b);
     textSize(this.fontSize * 0.75);
-    text(this.monthName + ` ` + this.day, this.x + 80, this.y + 12);
+    text(this.monthName + ` ` + this.day, this.x + 80, this.y + 15);
     pop();
   }
 
@@ -100,8 +100,8 @@ class WeatherInfo {
     textStyle(BOLD);
 
     if (this.minute < 10) {
-      text(this.hour + `: 0` + this.minute, this.x + 80, this.y - 5);
-    } else text(this.hour + `: ` + this.minute, this.x + 80, this.y - 5);
+      text(this.hour + `: 0` + this.minute, this.x + 90, this.y - 5);
+    } else text(this.hour + `: ` + this.minute, this.x + 90, this.y - 5);
 
     pop();
   }
@@ -111,7 +111,7 @@ class WeatherInfo {
     push();
     fill(this.darkerRed.r, this.darkerRed.g, this.darkerRed.b);
     textSize(this.fontSize * 0.75);
-    text(this.city, this.x + 80, this.y - 30);
+    text(this.city, this.x + 90, this.y - 30);
     pop();
   }
 
@@ -126,7 +126,7 @@ class WeatherInfo {
     fill(this.red.r, this.red.g, this.red.b);
     textSize(this.fontSize * 2.3);
     textStyle(BOLD);
-    text(this.tempRounded + `°C`, this.x - 10, this.y + 10);
+    text(this.tempRounded + `°C`, this.x - 10, this.y) + 10;
     pop();
   }
 }

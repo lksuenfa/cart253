@@ -7,6 +7,9 @@ let weatherURL =
 let weatherState;
 let weatherID;
 
+//states
+let state = `title`;
+
 // Cloudy sky parameters
 let cloudy;
 let clouds = []; //array to store cloud
@@ -29,7 +32,6 @@ let ground;
 
 // the cutest Mossy rock
 let rock = {
-  x: 200,
   y: 570,
   img: undefined,
   width: 300,
@@ -62,7 +64,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(400, 700);
+  createCanvas(500, 700);
 
   // general weather
   weatherState = weatherData.weather.main;
@@ -112,6 +114,28 @@ function setup() {
 }
 
 function draw() {
+  // switch states when clicking
+  switch (state) {
+    case `title`:
+      title();
+      break;
+
+    case `simulation`:
+      simulation();
+      break;
+  }
+}
+
+function title() {
+  push();
+  background(240);
+  textSize(36);
+  fill(109, 151, 181);
+  textAlign(CENTER, CENTER);
+  text(`Click to start`, width / 2, height / 2);
+}
+
+function simulation() {
   //background is sky colour and is responsive to weather data and time of the day
   sky = new Sky(localTime, cloudy, sunset, sunrise);
   sky.skyColour();
@@ -128,7 +152,7 @@ function draw() {
   }
   // display rock
   imageMode(CENTER);
-  image(rock.img, rock.x, rock.y, rock.width, rock.height);
+  image(rock.img, width / 2, rock.y, rock.width, rock.height);
 
   // display Weather Info
   displayInfo = new WeatherInfo(temperature, hour, minute, dayOfMonth, month);
@@ -169,6 +193,12 @@ function checkRain() {
     ) {
       rainIntensity = 700;
     }
+  }
+}
+
+function mousePressed() {
+  if ((state = `title`)) {
+    state = `simulation`;
   }
 }
 
