@@ -1,37 +1,26 @@
 class Rain {
-  constructor(x, raining) {
-    this.x = x;
-    this.y = 0;
-    this.height = 5;
+  constructor() {
+    this.x = random(0, width);
+    this.y = random(-900, 0);
+    this.length = random(3, 7);
+    this.ground = 600;
     this.width = 2;
-    this.colour = {
-      r: 245,
-      b: 245,
-      c: 245,
-      a: 200,
-    };
-    this.speed = 5;
-
-    this.raining = raining; //data from weather API checking rain
+    (this.colour = 245), (this.speed = 5);
   }
 
-  rainFalls() {
+  move() {
     // show rain falling before touching the ground which is at y = 600
     this.y += this.speed;
-    // if touch the ground rain disappeears
-    if (this.y > 600) {
-      this.colour.a = 0;
+    // if touch the ground rain goes back up
+    if (this.y > this.ground) {
+      this.y = random(-500, -200);
     }
   }
 
-  // rain looks like transparent rectangular bars
-  displayRain() {
-    if (raining === true) {
-      push();
-      noStroke();
-      fill(this.colour.r, this.colour.b, this.colour.c, this.colour.a);
-      rect(this.x, this.y, this.width, this.height);
-      pop();
-    }
+  display() {
+    push();
+    stroke(this.colour);
+    line(this.x, this.y, this.x, this.y + this.length);
+    pop();
   }
 }
