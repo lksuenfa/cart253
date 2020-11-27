@@ -5,7 +5,7 @@ class Accessory {
       y: height / 2,
       image: image,
     };
-    this.state = `simulation`;
+    // this.state = `simulation`;
   }
 
   //display icon
@@ -17,6 +17,11 @@ class Accessory {
   //change state on click to make window appear
   mousePressed() {
     let d = dist(this.icon.x, this.icon.y, mouseX, mouseY);
-    this.state = `accessory`;
+
+    if (d < 20) {
+      state = `accessory`;
+    }
+
+    console.log("ribbon clicked");
   }
 }

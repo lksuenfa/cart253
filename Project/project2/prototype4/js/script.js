@@ -53,6 +53,7 @@ let displayInfo;
 
 //accessory bar
 let ribbonImage;
+let ribbon;
 
 //background music
 let music = [];
@@ -69,10 +70,10 @@ function preload() {
   for (let i = 0; i < numCloudImages; i++) {
     let loadCloudImage = loadImage(`assets/images/clouds/cloud${i}.png`);
     cloudImages.push(loadCloudImage);
-
-    //load ribbon image
-    ribbonImage = loadImage("assets/images/ribbon.png");
   }
+
+  //load ribbon image
+  ribbonImage = loadImage("assets/images/ribbon.png");
 
   //load background music
   for (let i = 0; i < numMusic; i++) {
@@ -129,6 +130,8 @@ function setup() {
     let rainFall = new Rain();
     rainYes.push(rainFall);
   }
+
+  ribbon = new Accessory(ribbonImage);
 }
 
 function draw() {
@@ -192,7 +195,7 @@ function simulation() {
   }
 
   //ribbon
-  let ribbon = new Accessory(ribbonImage);
+
   ribbon.display();
 }
 
@@ -234,12 +237,12 @@ function accessory() {
 }
 
 function mousePressed() {
-  if ((state = `title`)) {
+  if (state === `title`) {
     state = `simulation`;
     // addMusic();
   }
 
-  if ((state = `simulation`)) {
+  if (state === `simulation`) {
     ribbon.mousePressed();
   }
 }
