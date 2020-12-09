@@ -52,10 +52,14 @@ let temperature;
 let displayInfo;
 
 //accessory bar
-let ribbonImage;
-let ribbon;
-let yesIcon = undefined;
-let noIcon = undefined;
+let accessory = {
+  x: 250,
+  y: 450,
+  num: 5, //6 images in total
+  i: 0,
+};
+let accessoryImages = []; //to store images
+
 //background music
 let music = [];
 let numMusic = 2;
@@ -73,12 +77,11 @@ function preload() {
     cloudImages.push(loadCloudImage);
   }
 
-  //load ribbon image
-  ribbonImage = loadImage("assets/images/ribbon.png");
-
-  //load navigation icons
-  yesIcon = loadImage("assets/images/check.png");
-  noIcon = loadImage("assets/images/cross.png");
+  // load accessory images
+  for (let i = 0; i < accessory.num; i++) {
+    let loadImg = loadImage(`assets/images/accessory/accessory${i}.png`);
+    accessoryImages.push(loadImg);
+  }
 
   //load background music
   for (let i = 0; i < numMusic; i++) {
@@ -135,8 +138,6 @@ function setup() {
     let rainFall = new Rain();
     rainYes.push(rainFall);
   }
-
-  ribbon = new Accessory(ribbonImage);
 }
 
 function draw() {
@@ -148,10 +149,6 @@ function draw() {
 
     case `simulation`:
       simulation();
-      break;
-
-    case `accessory`:
-      accessory();
       break;
   }
 }
@@ -199,8 +196,9 @@ function simulation() {
     cloud.move();
   }
 
-  //ribbon
-  ribbon.display();
+  //display accessory
+  imageMode(CENTER);
+  image(accessoryImages[accessory.i], accessory.x, accessory.y);
 }
 
 // checking rain
@@ -230,27 +228,21 @@ function checkRain() {
   }
 }
 
-function accessory() {
-  push();
-  background(114, 137, 143);
-  textSize(36);
-  fill(255);
-  textAlign(LEFT, TOP);
-  text(`Make it pretty:`, 50, 40);
-  pop();
-
-  imageMode(CENTER);
-  image(yesIcon);
-}
-
 function mousePressed() {
   if (state === `title`) {
     state = `simulation`;
     // addMusic();
   }
 
-  if (state === `simulation`) {
-    ribbon.mousePressed();
+  let d = dist(accessory.x, accessory.y, mouseX, mouseY);
+  //if click on rock then accessory displayed because i changes
+  if (d < accessory.x / 1.5) {
+    accessory.i = accessory.i + 1;
+
+    //reset to first image if we get to
+    if (accessory.i > accessory.num - 1) {
+      accessory.i = 0;
+    }
   }
 }
 
