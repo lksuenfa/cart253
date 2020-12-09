@@ -54,7 +54,8 @@ let displayInfo;
 //accessory bar
 let ribbonImage;
 let ribbon;
-
+let yesIcon = undefined;
+let noIcon = undefined;
 //background music
 let music = [];
 let numMusic = 2;
@@ -74,6 +75,10 @@ function preload() {
 
   //load ribbon image
   ribbonImage = loadImage("assets/images/ribbon.png");
+
+  //load navigation icons
+  yesIcon = loadImage("assets/images/check.png");
+  noIcon = loadImage("assets/images/cross.png");
 
   //load background music
   for (let i = 0; i < numMusic; i++) {
@@ -195,7 +200,6 @@ function simulation() {
   }
 
   //ribbon
-
   ribbon.display();
 }
 
@@ -230,10 +234,13 @@ function accessory() {
   push();
   background(114, 137, 143);
   textSize(36);
-  fill(109, 151, 181);
-  textAlign(CENTER, CENTER);
-  text(`Choose one:`, width / 2, height / 2);
+  fill(255);
+  textAlign(LEFT, TOP);
+  text(`Make it pretty:`, 50, 40);
   pop();
+
+  imageMode(CENTER);
+  image(yesIcon);
 }
 
 function mousePressed() {
