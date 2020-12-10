@@ -1,3 +1,5 @@
+//Help was gratefully received from instructor to debug this code to make flowers grow from images changing at different intervals
+
 class Garden {
   constructor(growthInterval) {
     this.x = random(-10, width);

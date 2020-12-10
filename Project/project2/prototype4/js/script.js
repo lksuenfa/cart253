@@ -201,7 +201,17 @@ function title() {
   textSize(36);
   fill(109, 151, 181);
   textAlign(CENTER, CENTER);
-  text(`Click to start`, width / 2, height / 2);
+  text(`Welcome to a tiny garden`, width / 2, height / 2);
+
+  textSize(20);
+  text(`< Click to start >`, width / 2, height / 2 + 100);
+
+  textSize(16);
+  text(
+    `Click on the little rock to change accessories`,
+    width / 2,
+    height / 2 + 200
+  );
   pop();
 }
 

@@ -1,6 +1,6 @@
-# Template p5 project
+Artist statement
 
-This is the README file for the entire project. For more official projects you should write information here about the nature of the project, your name, any special explanations of how the project works, etc.
+This game inspired by the Slow Movement aims at creating a simple world simulation experience connected to real-world time and weather data. By connecting the digital world to the physical world, we want to create an aesthetic experience which will make the user appreciative of something which is often overlooked in our cluttered and busy digital environments: the slow passing of time slowly in nature.
 
 Ressources:
 10.5 Open Weather Map API by codingtrain
