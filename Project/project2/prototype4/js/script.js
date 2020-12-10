@@ -60,6 +60,23 @@ let accessory = {
 };
 let accessoryImages = []; //to store images
 
+//bkg images
+let mountains = {
+  x: 250,
+  y: 400,
+  img: [],
+  num: 3,
+};
+
+let garden = [];
+let gardenImages = [];
+let numGardenImages = 4;
+let numFlowers = 20;
+let growthOrder = 0;
+
+//bkg
+let displayMountain;
+
 //background music
 let music = [];
 let numMusic = 2;
@@ -81,6 +98,18 @@ function preload() {
   for (let i = 0; i < accessory.num; i++) {
     let loadImg = loadImage(`assets/images/accessory/accessory${i}.png`);
     accessoryImages.push(loadImg);
+  }
+
+  //load mountain images
+  for (let i = 0; i < mountains.num; i++) {
+    let loadImg = loadImage(`assets/images/bkg/bkg${i}.png`);
+    mountains.img.push(loadImg);
+  }
+
+  //load garden images
+  for (let i = 0; i < numGardenImages; i++) {
+    let loadImg = loadImage(`assets/images/plant/plant${i}.png`);
+    gardenImages.push(loadImg);
   }
 
   //load background music
@@ -132,12 +161,23 @@ function setup() {
     clouds.push(cloud);
   }
 
+  //create garden of Flowers
+  for (let i = 0; i < numFlowers; i++) {
+    let growthInterval = random(5000, 10000);
+    // let flowerStage = gardenImages[growthOrder];
+    let flower = new Garden(0, growthInterval);
+    garden.push(flower);
+  }
+
   // raining
   checkRain();
   for (let i = 0; i < rainIntensity; i++) {
     let rainFall = new Rain();
     rainYes.push(rainFall);
   }
+
+  //start with a random mountain pic everytime the game is opened
+  displayMountain = random(mountains.img);
 }
 
 function draw() {
@@ -168,6 +208,10 @@ function simulation() {
   sky = new Sky(localTime, cloudy, sunset, sunrise);
   sky.skyColour();
 
+  //display mountains
+  imageMode(CENTER);
+  image(displayMountain, mountains.x, mountains.y);
+
   // display Ground  which is responsive to time of the day and season changeSeasons
   ground = new Ground(localTime, dayOfMonth, month, sunset, sunrise);
   ground.changeSeasons();
@@ -178,6 +222,7 @@ function simulation() {
     rainFall.display();
     rainFall.move();
   }
+
   // display rock
   imageMode(CENTER);
   image(rock.img, width / 2, rock.y, rock.width, rock.height);
@@ -199,6 +244,12 @@ function simulation() {
   //display accessory
   imageMode(CENTER);
   image(accessoryImages[accessory.i], accessory.x, accessory.y);
+
+  //display flower garden
+  for (let i = 0; i < garden.length; i++) {
+    let flower = garden[i];
+    flower.display();
+  }
 }
 
 // checking rain
