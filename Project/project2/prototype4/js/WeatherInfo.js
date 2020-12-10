@@ -1,3 +1,5 @@
+// display weather info
+
 class WeatherInfo {
   constructor(temp, hour, minute, day, month) {
     this.city = `Montreal`;

@@ -1,7 +1,7 @@
 class Rain {
   constructor() {
     this.x = random(0, width);
-    this.y = random(-900, 0);
+    this.y = random(-900, 0); //start appearing way above the canvas so that they don't fall in one line at the same speed
     this.length = random(3, 7);
     this.ground = 600;
     this.width = 2;

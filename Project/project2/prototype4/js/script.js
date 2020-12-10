@@ -1,11 +1,13 @@
 "use strict";
 
 let weatherData;
+
+//url from Open Weather API
 let weatherURL =
   "https://api.openweathermap.org/data/2.5/weather?q=montreal&units=metric&appid=f1980699c5ed03fcc2acd671a112e5c3";
 
 let weatherState;
-let weatherID;
+let weatherID; //code found on Open weather map for each type of weather forecast
 
 //states
 let state = `title`;
@@ -56,7 +58,7 @@ let accessory = {
   x: 250,
   y: 450,
   num: 5, //6 images in total
-  i: 0,
+  i: 0, //position in array
 };
 let accessoryImages = []; //to store images
 
@@ -65,17 +67,16 @@ let mountains = {
   x: 250,
   y: 400,
   img: [],
-  num: 3,
+  num: 3, //number of nkg pictures
 };
+let displayMountain; //variable to randomise bkg pics
 
+//flower garden
 let garden = [];
 let gardenImages = [];
 let numGardenImages = 4;
-let numFlowers = 20;
+let numFlowers = 10;
 let growthOrder = 0;
-
-//bkg
-let displayMountain;
 
 //background music
 let music = [];
@@ -83,6 +84,7 @@ let numMusic = 2;
 let bkgMusic;
 
 function preload() {
+  //loading API
   weatherData = loadJSON(weatherURL);
 
   // load rock image
@@ -106,7 +108,7 @@ function preload() {
     mountains.img.push(loadImg);
   }
 
-  //load garden images
+  //load flower images in garden
   for (let i = 0; i < numGardenImages; i++) {
     let loadImg = loadImage(`assets/images/plant/plant${i}.png`);
     gardenImages.push(loadImg);
@@ -126,7 +128,7 @@ function setup() {
   weatherState = weatherData.weather.main;
 
   // call weather data for sky condition
-  sunrise = convertUnix(weatherData.sys.sunrise);
+  sunrise = convertUnix(weatherData.sys.sunrise); //necessary to convert Unix time stamp
   sunset = convertUnix(weatherData.sys.sunset);
 
   // call weather data for temp
@@ -135,15 +137,16 @@ function setup() {
   //call cloud percentage data
   cloudData = weatherData.clouds.all;
 
+  //call weather ID from API
   weatherID = weatherData.weather.id;
 
   //Call pc time
   let date = new Date();
-  hour = date.getHours();
-  minute = date.getMinutes();
-  localTime = hour + minute / 60;
+  hour = date.getHours(); //call local time in hour
+  minute = date.getMinutes(); //call local time in minute
   dayOfMonth = date.getDate(); //Returns the day of the month (from 1-31)
   month = date.getMonth(); //Returns the month (from 0-11)
+  localTime = hour + minute / 60; //turn time into a value so that it can be used in if statement
 
   //if sky is overcast, i.e cloudiness > 85% then cloudy is true
   // if cloudy is true then sky is grey
@@ -151,7 +154,7 @@ function setup() {
     cloudy = true;
   } else cloudy = false;
 
-  // make a certain number of clouds appear
+  // make a certain number of clouds appear from array
   checkClouds();
   for (let i = 0; i < numClouds; i++) {
     let x = random(-500, 100);
@@ -163,9 +166,8 @@ function setup() {
 
   //create garden of Flowers
   for (let i = 0; i < numFlowers; i++) {
-    let growthInterval = random(5000, 10000);
-    // let flowerStage = gardenImages[growthOrder];
-    let flower = new Garden(0, growthInterval);
+    let growthInterval = random(5000, 50000);
+    let flower = new Garden(growthInterval);
     garden.push(flower);
   }
 
@@ -243,7 +245,7 @@ function simulation() {
 
   //display accessory
   imageMode(CENTER);
-  image(accessoryImages[accessory.i], accessory.x, accessory.y);
+  image(accessoryImages[accessory.i], accessory.x, accessory.y); //will display image in position i
 
   //display flower garden
   for (let i = 0; i < garden.length; i++) {
@@ -253,6 +255,7 @@ function simulation() {
 }
 
 // checking rain
+//display rain intensity according to API waether ID
 function checkRain() {
   if (weatherState === `Rain`) {
     // if raining
@@ -262,7 +265,7 @@ function checkRain() {
       weatherID === 531 || //ragged shower
       weatherID === 511 //freezing rain
     ) {
-      rainIntensity = 100;
+      rainIntensity = 100; //lowest rain intensity
     } else if (
       weatherID === 501 || //moderate rain
       weatherID === 521 //shower rain
@@ -282,16 +285,17 @@ function checkRain() {
 function mousePressed() {
   if (state === `title`) {
     state = `simulation`;
-    // addMusic();
+    addMusic();
   }
 
+  //distance between rock and cursor
   let d = dist(accessory.x, accessory.y, mouseX, mouseY);
-  //if click on rock then accessory displayed because i changes
+  //if click on rock then accessory displayed changes because we display next image in the array
   if (d < accessory.x / 1.5) {
-    accessory.i = accessory.i + 1;
+    accessory.i++;
 
-    //reset to first image if we get to
-    if (accessory.i > accessory.num - 1) {
+    //reset to first image if we get to last one in array
+    if (accessory.i >= accessory.num) {
       accessory.i = 0;
     }
   }
@@ -300,20 +304,31 @@ function mousePressed() {
 //check cloud percentage to know how many clouds to display
 function checkClouds() {
   //amount of clouds appearing depend on cloud data % from openweathermap
+
+  //<10% display no cloud
   if (cloudData <= 10) {
     numClouds = 0;
+
+    //between 10%-25% display 1 cloud
   } else if (cloudData > 10 && cloudData < 25) {
     numClouds = 1; //few clouds: 11-25%
+
+    //between 25%-50% display 2 clouds
   } else if (cloudData >= 25 && cloudData < 50) {
     numClouds = 2; //scattered clouds: 25-50%
+
+    //between 50-85% display 4 clouds
   } else if (cloudData >= 50 && cloudData < 85) {
     numClouds = 4; //	broken clouds: 51-84%
+
+    //between >85% display 6 clouds
   } else {
     numClouds = 6; //	overcast clouds: 85-100%
   }
 }
 
 // Convert unix time code to regular time
+//formula found on W3 - see readme
 function convertUnix(unixTime) {
   let date = new Date(unixTime * 1000);
   let hour = date.getHours();
@@ -325,6 +340,8 @@ function convertUnix(unixTime) {
 function addMusic() {
   //select random music from music bank
   bkgMusic = random(music);
+
+  //play music loop
   if (!bkgMusic.isPlaying()) {
     bkgMusic.loop();
   }

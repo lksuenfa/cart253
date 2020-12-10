@@ -30,8 +30,8 @@ class Sky {
 
     this.cloudy = true;
 
-    this.cloudyDay = 222;
-    this.cloudyNight = 64;
+    this.cloudyDay = 222; //pale grey
+    this.cloudyNight = 64; // dark grey
   }
 
   //Change background colour according to local time,
